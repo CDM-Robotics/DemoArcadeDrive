@@ -38,6 +38,9 @@ public class Robot extends IterativeRobot {
 
   ArrayList<TalonSRX> mMasterTalons = new ArrayList<TalonSRX>();
 
+  private int m_MilliCount = 0;        //second counter for the debug
+  private int m_PeriodicCount = 0;
+  
 
   @Override
   public void robotInit() {
@@ -86,12 +89,20 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
     //mRoboDrive.tankDrive(m_leftStick.getY(), m_rightStick.getY());
-
+    
+    m_MilliCount = m_MilliCount + 1;   
+    m_PeriodicCount = m_PeriodicCount + 1;                                      // adds 1 every 20 miliseconds 
+    if (m_MilliCount == 100){                                             // 100 groups of 20 miliseconds is 20 seconds
+      System.out.println("====================================");
+      System.out.println("Debug--Complete for the " + m_PeriodicCount + " time");
+      System.out.println("====================================");
+      m_MilliCount = 0;
+    }
     double mag, yaw;
     mag = m_leftStick.getY();                   // how fast
     yaw = m_leftStick.getX();                   // turn left or right
     yaw = yaw * 0.8;                            // reduce sensitivity on turn
-    mRoboDrive.arcadeDrive(-mag, yaw, true);    // last param is whether to square the inputs - modifies response characteristics
+    mRoboDrive.arcadeDrive(-mag, yaw, true);  // last param is whether to square the inputs - modifies response characteristics
   }
 
 
