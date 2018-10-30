@@ -78,7 +78,6 @@ public class Robot extends IterativeRobot {
    *    Each side of the robot is controlled independently with two sticks
    * Arcade Drive - This mode uses one value to control the throttle (speed along the X-axis)
    *    of the drivetrain and one for the rate of rotation - single stick
-   * 
    * Go here to see doco on DifferentialDrive class and arcadeDrive() method
    *    http://first.wpi.edu/FRC/roborio/release/docs/java/
    */
