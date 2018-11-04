@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -39,6 +38,8 @@ public class Robot extends IterativeRobot {
 
   ArrayList<TalonSRX> mMasterTalons = new ArrayList<TalonSRX>();
 
+  private int m_teleopCtr = 0;
+
 
   @Override
   public void robotInit() {
@@ -50,6 +51,7 @@ public class Robot extends IterativeRobot {
     mLeft_Master.configOpenloopRamp(0.1 , 10);
     mLeft_Master.setNeutralMode(NeutralMode.Brake);
     mLeft_Master.setSensorPhase(true);
+    mLeft_Master.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
 
     mLeft_Slave0 = new WPI_TalonSRX(RobotConfig.DRIVE_LEFT_SLAVE0);
     mLeft_Slave0.set(ControlMode.Follower, RobotConfig.DRIVE_LEFT_MASTER);
@@ -59,6 +61,7 @@ public class Robot extends IterativeRobot {
     mRight_Master.setSafetyEnabled(false);
     mRight_Master.configOpenloopRamp(0.1, 10);
     mRight_Master.setNeutralMode(NeutralMode.Brake);
+    mRight_Master.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 0);
 
     mRight_Slave0 = new WPI_TalonSRX(RobotConfig.DRIVE_RIGHT_SLAVE0);
     mRight_Slave0.set(ControlMode.Follower, RobotConfig.DRIVE_RIGHT_MASTER);
@@ -93,6 +96,16 @@ public class Robot extends IterativeRobot {
     yaw = m_leftStick.getX();                   // turn left or right
     yaw = yaw * 0.8;                            // reduce sensitivity on turn
     mRoboDrive.arcadeDrive(-mag, yaw, true);    // last param is whether to square the inputs - modifies response characteristics
+
+    m_teleopCtr++;
+    if (m_teleopCtr % 50 == 0)  {
+      int lQuad = mLeft_Master.getSensorCollection().getQuadraturePosition();
+      int lPW = mLeft_Master.getSensorCollection().getPulseWidthPosition();
+      int lQuadVel = mLeft_Master.getSensorCollection().getQuadratureVelocity();
+      int lPWVel = mLeft_Master.getSensorCollection().getPulseWidthVelocity();
+      System.out.printf("teleopPeriodic:    lQuad: %6d   lPW: %6d   lQuadVel: %6d   lPWVel: %6d", lQuad, lPW, lQuadVel, lPWVel);
+    }
+
   }
 
 
