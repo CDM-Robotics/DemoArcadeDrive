@@ -39,8 +39,12 @@ public class Robot extends IterativeRobot {
   ArrayList<TalonSRX> mMasterTalons = new ArrayList<TalonSRX>();
 
   private int m_MilliCount = 0;        //second counter for the debug
+
   private int m_PeriodicCount = 0;
-  
+
+  private int m_teleopCtr = 0;
+ 
+
 
   @Override
   public void robotInit() {
@@ -98,6 +102,25 @@ public class Robot extends IterativeRobot {
       System.out.println("====================================");
       m_MilliCount = 0;
     }
+
+    m_teleopCtr++;
+    if (m_teleopCtr % 50 == 0)  {
+
+      int lQuad = mLeft_Master.getSensorCollection().getQuadraturePosition();
+
+      int lPW = mLeft_Master.getSensorCollection().getPulseWidthPosition();// ticks
+
+      int lQuadVel = mLeft_Master.getSensorCollection().getQuadratureVelocity();
+
+      int lPWVel = mLeft_Master.getSensorCollection().getPulseWidthVelocity();
+
+      System.out.printf("teleopPeriodic:    lQuad: %6d   lPW: %6d   lQuadVel: %6d   lPWVel: %6d", lQuad, lPW, lQuadVel, lPWVel);
+      
+    }
+
+    
+    
+    // 0.0046 inches per tick(rounded from 0.00460205 inches)
     double mag, yaw;
     mag = m_leftStick.getY();                   // how fast
     yaw = m_leftStick.getX();                   // turn left or right
