@@ -23,8 +23,12 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 /**
  * This is a demo program showing the use of the RobotDrive class, specifically
  * it contains the code necessary to operate a robot with tank drive.
+<<<<<<< HEAD
  * 
  * DE branch  18:43
+=======
+ * Austin leehealey
+>>>>>>> de98cf7532cea14c16f6e24700bc1cd53999f6f5
  */
 public class Robot extends IterativeRobot {
 
