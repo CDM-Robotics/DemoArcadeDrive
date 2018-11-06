@@ -88,25 +88,75 @@ public class Robot extends IterativeRobot {
    *    http://first.wpi.edu/FRC/roborio/release/docs/java/
    */
   @Override
-  public void teleopPeriodic() {
+  public void teleopPeriodic() 
+  {
     //mRoboDrive.tankDrive(m_leftStick.getY(), m_rightStick.getY());
 
     double mag, yaw;
+
     mag = m_leftStick.getY();                   // how fast
     yaw = m_leftStick.getX();                   // turn left or right
-    yaw = yaw * 0.8;                            // reduce sensitivity on turn
-    mRoboDrive.arcadeDrive(-mag, yaw, true);    // last param is whether to square the inputs - modifies response characteristics
+    yaw = yaw * 0.8;    // reduce sensitivity on turn
+    mRoboDrive.arcadeDrive(-mag, yaw, true);
 
+    //outputs all the data
     m_teleopCtr++;
-    if (m_teleopCtr % 50 == 0)  {
-      int lQuad = mLeft_Master.getSensorCollection().getQuadraturePosition();
-      int lPW = mLeft_Master.getSensorCollection().getPulseWidthPosition();
-      int lQuadVel = mLeft_Master.getSensorCollection().getQuadratureVelocity();
-      int lPWVel = mLeft_Master.getSensorCollection().getPulseWidthVelocity();
-      System.out.printf("teleopPeriodic:    lQuad: %6d   lPW: %6d   lQuadVel: %6d   lPWVel: %6d", lQuad, lPW, lQuadVel, lPWVel);
-    }
+    if (m_teleopCtr % 50 == 0) 
+     {
+        int lQuad = mLeft_Master.getSensorCollection().getQuadraturePosition();
+        int lPW = mLeft_Master.getSensorCollection().getPulseWidthPosition();
+        int lQuadVel = mLeft_Master.getSensorCollection().getQuadratureVelocity();
+        int lPWVel = mLeft_Master.getSensorCollection().getPulseWidthVelocity();
+        System.out.printf("teleopPeriodic:    lQuad: %6d   lPW: %6d   lQuadVel: %6d   lPWVel: %6d", lQuad, lPW, lQuadVel, lPWVel);
+        System.out.println();
 
+        double distance = (lQuad / 4096) * 6 * 3.1415;
+        System.out.println("Distance Traveled is : " + distance);
+
+      }
+  
   }
 
+  public void autonomousPeriodic()
+  {
+    double mag, yaw;
+
+    int lQuad = mLeft_Master.getSensorCollection().getQuadraturePosition();
+    int rQuad = mRight_Master.getSensorCollection().getQuadraturePosition();
+
+    //sets the quadrature distance travelled to zero 
+    if (m_teleopCtr == 0)
+    {
+        mLeft_Master.getSensorCollection().setQuadraturePosition(0, 10);
+        mRight_Master.getSensorCollection().setQuadraturePosition(0, 10);
+    }
+
+    //outputs all the data every second
+    if (m_teleopCtr % 50 == 0)  {
+
+        lQuad = mLeft_Master.getSensorCollection().getQuadraturePosition();
+        int lPW = mLeft_Master.getSensorCollection().getPulseWidthPosition();
+        int lQuadVel = mLeft_Master.getSensorCollection().getQuadratureVelocity();
+        int lPWVel = mLeft_Master.getSensorCollection().getPulseWidthVelocity();
+        
+        System.out.printf("teleopPeriodic:    lQuad: %6d   lPW: %6d   lQuadVel: %6d   lPWVel: %6d", lQuad, lPW, lQuadVel, lPWVel);
+        System.out.println();
+
+        double distance = (lQuad / 4096) * 6 * 3.1415;
+        System.out.println("Distance Traveled is : " + distance);
+
+    }
+    //stops the drive train after it travels 2 feet based off of this algorithm ((2ft * 12in) * 4096) / (6 * 3.1415) = 5216
+    if (lQuad <= 5216 && rQuad <= 5216)
+        mag = -.5;
+    else mag = 0;
+
+    yaw = 0;
+  
+    mRoboDrive.arcadeDrive(-mag, yaw, true);    // last param is whether to square the inputs - modifies response characteristics
+
+    //increments the time holder by .02sec
+    m_teleopCtr++;
+    }
 
 }
