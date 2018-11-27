@@ -3,7 +3,7 @@
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.       
-/* mod to check git    mod 2 and now mod 3                               */
+/* mod to check git    mod 2018-11-26                                         */
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
@@ -25,6 +25,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
  * This is a demo program showing the use of the RobotDrive class, specifically
  * it contains the code necessary to operate a robot with tank drive.
  */
+
+
 public class Robot extends IterativeRobot {
 
   private DifferentialDrive mRoboDrive;
@@ -36,7 +38,7 @@ public class Robot extends IterativeRobot {
   private WPI_TalonSRX mRight_Slave0;
 
   ArrayList<TalonSRX> mMasterTalons = new ArrayList<TalonSRX>();
-
+  private int m_count = 0;
 
   @Override
   public void robotInit() {
@@ -91,7 +93,15 @@ public class Robot extends IterativeRobot {
     yaw = m_leftStick.getX();                   // turn left or right
     yaw = yaw * 0.8;                            // reduce sensitivity on turn
     mRoboDrive.arcadeDrive(-mag, yaw, true);    // last param is whether to square the inputs - modifies response characteristics
+   
+    ++m_count; //+1
+    if(m_count == 100){
+      m_count = 0;
+      System.out.println("comments");
+    }
+      
+
+  
+
   }
-
-
 }
