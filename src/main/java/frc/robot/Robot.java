@@ -23,8 +23,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 // setup for NavX
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.SerialPort;
 
 
 /**
