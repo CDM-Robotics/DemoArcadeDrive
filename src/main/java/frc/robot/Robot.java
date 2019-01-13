@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
   private AHRS mAhrs;       // this is the NavX control library
 
   //teleop variables
-  private int m_teleopCtr = 0;
+  private int count = 0;
 
   //autonomous variables
   private int m_autonomousCtr = 0;
@@ -121,8 +121,8 @@ public class Robot extends IterativeRobot {
     yaw = yaw * 0.8;                            // reduce sensitivity on turn
     mRoboDrive.arcadeDrive(mag, yaw, true);    // last param is whether to square the inputs - modifies response characteristics
 
-    m_teleopCtr++;
-    if (m_teleopCtr % 50 == 0)  {
+    count++;
+    if (count == 100)  {
       int lQuad = mLeft_Master.getSensorCollection().getQuadraturePosition();
       int lPW = mLeft_Master.getSensorCollection().getPulseWidthPosition();
       int lQuadVel = mLeft_Master.getSensorCollection().getQuadratureVelocity();
